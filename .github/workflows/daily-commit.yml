@@ -2,25 +2,18 @@ name: Daily Commit by 23f1003053@ds.study.iitm.ac.in
 
 on:
   schedule:
-    - cron: '0 18 * * *'  # 6PM UTC daily
+    - cron: '0 18 * * *'
   workflow_dispatch:
 
 jobs:
   commit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Add daily update by 23f1003053@ds.study.iitm.ac.in
-      run: |
-        echo "# Daily Status\nUpdated: $(date)" > STATUS.md
-
-    - name: Commit & push
-      run: |
-        git config user.name github-actions[bot]
-        git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-        git add STATUS.md
-        git commit -m "Daily automated commit $(date)"
-        git push
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Daily update by 23f1003053@ds.study.iitm.ac.in
+        run: echo "$(date)" > STATUS.md
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: 'Daily commit $(date)'
