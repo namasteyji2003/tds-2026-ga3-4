@@ -5,15 +5,19 @@ on:
     - cron: '0 18 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write  # ← This fixes push permission!
+
 jobs:
   commit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Daily update by 23f1003053@ds.study.iitm.ac.in
-        run: echo "$(date)" > STATUS.md
-      - uses: EndBug/add-and-commit@v9
+        run: echo "$(date +%Y-%m-%d)" > STATUS.md
+        
+      - name: Commit STATUS.md
+        uses: EndBug/add-and-commit@v9
         with:
-          message: 'Daily commit $(date)'
+          message: 'Daily automated update {{ github.run_id }}'
